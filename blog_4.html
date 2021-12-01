@@ -304,17 +304,17 @@ Purchase:
                 <div class="blog_data">
                   <div class="blog_thumb">
                     <img
-                      src="assets/images/js.png"
+                      src="assets/images/port-blog3.jpg"
                       alt="blog-image"
                       class="img-fluid"
                     />
                   </div>
-                  <div class="blog_content">
+                  <div class="blog_content" style="padding: 5% !important;">
                     <div class="blog_postinfo pb-3">
                       <ul>
                         <li>
                           <a href="javascript:;">
-                            <i class="fas fa-calendar-alt"></i> Jun 29, 2020</a>
+                            <i class="fas fa-calendar-alt"></i> Apr 26, 2020</a
                           >
                         </li>
                         <!-- <li>
@@ -330,117 +330,124 @@ Purchase:
                       </ul>
                     </div>
                     <h4 class="blog_heading">
-                      What you need to know about JavaScript ES6
+                      Using laravel-echo with Nuxt.js
                     </h4>
-                    <p class="pt-3 pb-3">
-                      In this blog we will learn how to create our own webpack
-                      configuration to bundle a small JavaScript utility library
-                      using webpack and babel.
-                    </p>
-                    <h4>This blog will be divided into two parts:</h4>
-                    <ul style="list-style: none">
-                      <li>
-                        <strong>Part I</strong> will be about setting up the
-                        source code.
-                      </li>
-                      <li>
-                        <strong>Part II</strong> will be about setting up the
-                        webpack and babel configuration and testing our library.
-                      </li>
+                   
+                    <p>Hi devs, last day I was trying to configure my Nuxt.js client so it can consume public and private channels from my backend which is built with Laravel along the Laravel Websockets package.</p>
+
+                    <p>So this post is basically like a guide for me and everyone else in the same situation, my current stack is as follows:</p>
+                    
+                    <ul>
+                    <li>Laravel 6</li>
+                    <li><a href="https://laravel.com/docs/6.x/sanctum">Laravel Sanctum</a></li>
+                    <li><a href="https://docs.beyondco.de/laravel-websockets/">Laravel Websockets package</a></li>
+                    <li>Nuxt.js</li>
                     </ul>
-                    <p>
-                      Let’s create the source code for our library. For that we
-                      will be create two utility functions into two separate
-                      files in our source folder.
+                    
+                    
+                    <hr>
+                    
+                    <p>The following is the Vue plugin I created with the basic configuration you have to define in order to access and authenticate private channels:<br>
                     </p>
-                    <h4>
-                      Step 1 : Create a directory demo and run following command
-                      in it.
-                    </h4>
-                    <p>
-                      The above command will create a package.json in your
-                      project root. I am using a --y to initialize it with
-                      default options.
+                    
+                    <div class="highlight"><pre class="highlight javascript"><code><span class="k">import</span> <span class="nx">Vue</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">vue</span><span class="dl">'</span><span class="p">;</span>
+                    <span class="k">import</span> <span class="nx">Echo</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">laravel-echo</span><span class="dl">'</span><span class="p">;</span>
+                    
+                    <span class="kd">const</span> <span class="nx">echo</span> <span class="o">=</span> <span class="p">{};</span>
+                    
+                    <span class="nx">echo</span><span class="p">.</span><span class="nx">install</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">Vue</span><span class="p">)</span> <span class="p">{</span>
+                      <span class="nx">Vue</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">$pusher</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">pusher-js</span><span class="dl">'</span><span class="p">);</span>
+                      <span class="nx">Vue</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">$echo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Echo</span><span class="p">({</span>
+                        <span class="na">authEndpoint</span><span class="p">:</span> <span class="dl">'</span><span class="s1">http://your-domain.test/api/broadcasting/auth</span><span class="dl">'</span><span class="p">,</span>
+                        <span class="na">auth</span><span class="p">:</span> <span class="p">{</span>
+                          <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="na">Authorization</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Bearer XXXXXXXXXXXX</span><span class="dl">'</span><span class="p">,</span>
+                          <span class="p">}</span>
+                        <span class="p">},</span>
+                        <span class="na">broadcaster</span><span class="p">:</span> <span class="dl">'</span><span class="s1">pusher</span><span class="dl">'</span><span class="p">,</span>
+                        <span class="na">key</span><span class="p">:</span> <span class="dl">'</span><span class="s1">your-key</span><span class="dl">'</span><span class="p">,</span>
+                        <span class="na">wsHost</span><span class="p">:</span> <span class="dl">'</span><span class="s1">your.websocket.host</span><span class="dl">'</span><span class="p">,</span>
+                        <span class="na">wsPort</span><span class="p">:</span> <span class="mi">443</span><span class="p">,</span>
+                        <span class="na">encrypted</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                        <span class="na">disableStats</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                      <span class="p">});</span>
+                    <span class="p">};</span>
+                    
+                    <span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">echo</span><span class="p">);</span>
+                    </code></pre></div>
+                    
+                    
+                    
+                    <p>This is the description for the parameters we are going to use and what they are for:</p>
+                    
+                    <p><strong>auth_endpoint</strong>: Since you are using Nuxt or Vue it means you are generating a client that might be hosted or located in a different place than your backend, so you have to specify how to reach the backend.</p>
+                    
+                    <p><strong>auth</strong>: For this scenario I am using Laravel Sanctum authentication package, this is the reason I have to specify the Bearer token I am using.</p>
+                    
+                    <p><strong>broadcaster</strong>: I am using pusher-js which is the package required for Laravel-websockets.</p>
+                    
+                    <p>The 3 parameters above are the most important since they are not often showed as examples and are the keys so we can connect to our decoupled backend. The rest of them are necessary on any configuration.</p>
+                    
+                    
+                    <hr>
+                    
+                    <p>Once you defined the Echo instance, you can define your channels on any component:<br>
                     </p>
-                    <p>Directory Structure</p>
-                    <h4>Step 2: Adding our source code.</h4>
-                    <p>Let’s add our source code into src directory:</p>
-                    <p>
-                      Our utility library contains two functions capital, to
-                      capitalize a string and addDOMContent, to add content to a
-                      web page, each in it's own module.
+                    
+                    <div class="highlight"><pre class="highlight javascript"><code><span class="k">this</span><span class="p">.</span><span class="nx">$echo</span><span class="p">.</span><span class="kr">private</span><span class="p">(</span><span class="dl">'</span><span class="s1">App.User.</span><span class="dl">'</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">$auth</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+                            <span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="dl">'</span><span class="s1">GeneralEvent</span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">GENERAL EVENT: </span><span class="dl">"</span><span class="p">,</span> <span class="nx">e</span><span class="p">);</span>
+                            <span class="p">})</span>
+                            <span class="p">.</span><span class="nx">notification</span><span class="p">(</span><span class="nx">notification</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">NOTIFICATION: </span><span class="dl">"</span><span class="p">,</span> <span class="nx">notification</span><span class="p">);</span>
+                            <span class="p">});</span>
+                    </code></pre></div>
+                    
+                    
+                    
+                    <p>It is also important to add the following routes on your api.php routes file given you are using api authentication. As you can see we are specifying the sanctum middleware. Unlike web routes the session authentication is already applied when you enable the BroadcastServiceProvider.php file.<br>
                     </p>
-                    <p>
-                      Inside our index.js, we will import these two functions.
+                    
+                    <div class="highlight"><pre class="highlight php"><code><span class="nx">Broadcast</span><span class="o">::</span><span class="na">routes</span><span class="p">([</span><span class="s1">'middleware'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'auth:sanctum'</span><span class="p">]]);</span>
+                    </code></pre></div>
+                    
+                    
+                    
+                    
+                    <hr>
+                    
+                    <p>At this point you should be able to authenticate your private channels. But another important thing with this configuration is the way we are going to set our authentication token into our plugin. Luckily for us there is a package created by the Nuxt community: </p>
+                    
+                    <ul>
+                    <li><a href="https://github.com/nuxt-community/laravel-echo">laravel-echo</a></li>
+                    </ul>
+                    
+                    <p>I decided to go with this package instead my own plugin because I wasn't sure how to handle the auth mechanism, and also because I am using the nuxt-auth package which you can pair with laravel-echo package easily.</p>
+                    
+                    <p>So I ended up with the following configuration in nuxt.config.js<br>
                     </p>
-                    <p>
-                      So far we got the source code ready but we still need to
-                      bundle it so that the browsers can understand and oh boy!,
-                      we need to support some older browsers too 🙄. Anyway,
-                      being responsible developers we are going to do that 😎.
-                    </p>
-                    <h4>
-                      Step 3: Let’s install some of our project dev dependencies
-                      as they are only needed during development.
-                    </h4>
-                    <p>
-                      $ npm i --save-dev webpack webpack-cli @babel/core
-                      @babel/preset-env babel-loader
-                    </p>
-                    <p>
-                      We need webpack to bundle our code and webpack-cli is a
-                      command-line tool that uses webpack to do the same. Also
-                      webpack requires babel-loader to transpile our ES6 code to
-                      ES5 before bundling (Remember, what I said about being
-                      responsible developers 😃).
-                    </p>
-                    <h4>
-                      Step 4: Now let’s get our webpack and babel configuration
-                      in place. (We are almost there)
-                    </h4>
-                    <p>
-                      4.1. Create a webpack.config.js at the root of the
-                      project.
-                    </p>
-                    <p>
-                      There are a couple of things we need to understand about
-                      webpack configuration. Stay with me for a couple more
-                      minutes.
-                    </p>
-                    <p>
-                      @babel/preset-env let's us use the latest Javascript
-                      without any polyfills and syntax transforms. babel-loader
-                      uses babel under the hood.
-                    </p>
-                    <p>By Now our Project Structure should look like this:</p>
-                    <h4>
-                      Step 5: One last step. I know I keep saying that but I
-                      promise this is last 😬.
-                    </h4>
-                    <p>
-                      We have added our source files, now let’s add an npm
-                      script to build final code using webpack and modify the
-                      main property inside our package.json to point it to our
-                      bundled code.
-                    </p>
-                    <p>
-                      In package.json the main property is a direction to the
-                      entry point of the module that the package.json is
-                      describing.
-                    </p>
-                    <h5>
-                      Hurray! We have finally created our utility library using
-                      ES6.🥳
-                    </h5>
-                    <p>
-                      Run $npm run build to generate the bundled code and use it
-                      in the next step.
-                    </p>
-                    <h5>Let’s test our library now.</h5>
-                    <p>
-                      Save it and run it in your browser. You will see the name
-                      capitalized.
-                    </p>
+                    
+                    <div class="highlight"><pre class="highlight javascript"><code><span class="nx">buildModules</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">[</span><span class="dl">'</span><span class="s1">@nuxtjs/laravel-echo</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span>
+                          <span class="na">broadcaster</span><span class="p">:</span> <span class="dl">'</span><span class="s1">pusher</span><span class="dl">'</span><span class="p">,</span>
+                          <span class="na">authModule</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                          <span class="na">connectOnLogin</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                          <span class="na">authEndpoint</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">API_URL</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">/broadcasting/auth</span><span class="dl">'</span><span class="p">,</span>
+                          <span class="na">key</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">WEBSOCKET_KEY</span><span class="p">,</span>
+                          <span class="na">wsHost</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">WEBSOCKET_HOST</span><span class="p">,</span>
+                          <span class="na">wsPort</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">WEBSOCKET_PORT</span><span class="p">,</span>
+                          <span class="na">encrypted</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                          <span class="na">disableStats</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                        <span class="p">}],</span>
+                      <span class="p">],</span>
+                    </code></pre></div>
+                    
+                    
+                    
+                    <p><strong>authModule</strong>: When true it leverages from Nuxt auth module, this way you don't worry about how the auth is being handled, this will set up the token or any other authentication method internally unlike our manual set up.</p>
+                    
+                    <p><strong>connectOnLogin</strong>: When Nuxt auth module is authenticated it will allow you to connect your private channels when needed.</p>
+                    
                     <!-- Blog End -->
                   </div>
                 </div>
